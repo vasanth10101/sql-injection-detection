@@ -1,0 +1,49 @@
+import random
+import pandas as pd
+import numpy as np
+import subprocess
+import requests
+
+df = pd.read_csv("/content/drive/MyDrive/dataset /dataset1.csv")
+print(df.shape)
+
+def detect_sql_keywords(input_data):
+    sql_keywords = ['select', 'from', 'where', 'insert', 'update', 'delete', 'create', 'alter', 'drop']
+    for keyword in sql_keywords:
+        if keyword.lower() in input_data.lower():
+            return True
+    return False
+def detect_special_characters(input_data):
+    special_chars = ["'", "-", "(", ")", ";", "#", "/*", "*/", "--"]
+    for char in special_chars:
+        if char in input_data:
+            return True
+    return False
+def detect_sql_payloads(input_data, payload_list):
+    for payload in payload_list:
+        if payload.lower() in input_data.lower():
+            return True
+    return False
+def load_payloads_from_file(file_path):
+    with open("/content/drive/MyDrive/dataset /dataset1.csv", 'r') as file:
+        payloads = [line.strip() for line in file]
+    return payloads
+def detect_sql_injection(input_data, headers):
+    if detect_sql_keywords(input_data) or detect_special_characters(input_data) or detect_sql_payloads(input_data):
+        return True
+
+    if 'User-Agent' in headers:
+        user_agent = headers['User-Agent']
+        if detect_sql_keywords(user_agent) or detect_special_characters(user_agent) or detect_sql_payloads(user_agent):
+            return True
+
+    return False
+input_data = input("Enter search term: ")
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+}
+
+if detect_sql_injection(input_data, headers):
+    print("SQL injection detected!")
+else:
+    print("No SQL injection detected. Proceed with processing the input.")
