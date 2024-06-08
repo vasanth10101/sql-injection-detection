@@ -11,7 +11,7 @@ def detect_sql_keywords(input_data):
     return False
 
 def detect_special_characters(input_data):
-    special_chars = ["'", "-", "(", ")", ";", "#", "/*", "*/", "--"]
+    special_chars = ["'", "-", "(", ")", ";", "#", "\"", "--"]
     for char in special_chars:
         if char in input_data:
             return True
@@ -36,7 +36,7 @@ def detect_sql_injection(input_data, payload_list):
 
 # XSS functions
 def xss_special_characters(input_data):
-    xss_special_chars = ['<', '>', '"', "'", '/', '\\', '&', '(', ')', '=']
+    xss_special_chars = ['<', '>', '"', "'", '&', '(', ')', '[',']',';','{','}','/*']
     for char in xss_special_chars:
         if char in input_data:
             return True
@@ -86,10 +86,10 @@ root.geometry("400x300")
 
 tk.Label(root, text="URL of the website:", font=('Helvetica', 14)).pack(pady=5)
 entry = tk.Entry(root, width=30)
+entry = tk.Entry(root, width=30)
 entry.pack(pady=9)
 
-button_sql = tk.Button(root, text="vulnerbility check", font=('Helvetica', 14), command=on_button_click, bg='lightblue', fg='black')
+button_sql = tk.Button(root, text="vulnerability check", font=('Helvetica', 14), command=on_button_click, bg='lightblue', fg='black')
 button_sql.pack(pady=20)
-
 
 root.mainloop()
